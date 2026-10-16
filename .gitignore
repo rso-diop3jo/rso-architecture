@@ -1,0 +1,4 @@
+# macos hidden metadata in each folder.
+.DS_Store
+
+.claude/settings.local.json
