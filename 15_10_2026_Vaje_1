@@ -1,0 +1,81 @@
+### Te vaje so bolj logistične, da zvemo kaj je potrebno narediti. Ne bo podajanja snovi.
+
+**2 načina** da opravimo Vaje pri RSO:
+- seminar (do profesorja greš)
+- projekt (naredimo 1 cloud native aplikacijo)
+
+**Keywords za googlat in se učit, raziskovat, študirat**: Software engineering, cloud native design
+
+Vsaka skupina naredi:
+-
+1 GUI + 2 MIKROSOTRITVI/člana
+
+Se pravi naredimo 6 mikrostoritev in GUI, kjer bomo lahko dostopali in uporabljali 
+te mikrostoritve.
+
+GUI NI poanta, lahko ga zvibecodamo, poanta je da je iz kode razvidno kje smo uporabili osnovne zadeve in kako to funkcionira v našem appu. Se pravi Terraform, API Gateway, Ingress Controllers... Te vse zahteve so napisane v "Navdila za projekt in kriterij ocenjevanja" .pdf-ju. 
+
+- 19.10. [✅] Prijava skupine
+- 26.10. [ ] Prijava teme na spletni učilnici
+
+---
+
+Projekt se oddaja po principu:
+1. [max 10 točk] **Vmesna predstavitev (opcijsko, ni nam treba imeti)**
+2. [max 100 točk] **Končna predstavitev**
+3. [max 100 točk] **Koda**
+
+Končna ocena pa je utežena iz tega:
+
+OCENA = ⍺ * koda + (1 - ⍺) * Končna predstavitev + Vmesna predstavitev
+
+---
+
+Na začetku bomo magar še ene vaje imeli zato da nam pomaga vzpostaviti okolje, potem so pa še samo konzultacijske vaje.
+
+---
+
+Sedaj pa gremo registrirati se na Azure, pognali bomo en Kubernetes in ga nato ugasnili, da vidimo, kako se to dela.
+
+Po tem pa še lokalna orodja, ki nam bodo pomagala pri razvoju.
+
+NI NUJNO da je na Azure deployano, lako na AWS ali Google cloud, ali lokalno postaviš. Ampak dejmo kr z Azure, ker je lažje delati z kafko in takimi zadevami.
+
+---
+
+[Nvodila, kako naredimo Azure, naložimo Azure CLI...](https://gist.github.com/davidnabergoj/94d3176499f9a28e80bd12322319f8ab)
+
+Mi si želimo narediti te mikrostoritve popolnoma neodvisno ena od druge, zato se naredi ena organizacija in znotraj nje se naredi repozitorij za vsako mikrostoritev. Da simuliramo kako se dela v biznisu, kjer so ekipe neodvisne, in je vsaka nad svojim repotom. Ker ima svoj CI/CD, svoje teste, versioning, kjer lagko naredis gitops, da ce se deploya mikrosotirtev z buggi, da je ful simpl jo revertat na prejsno verzijo, ker je samo ta microservice v repozitoriju in lahko prilagodimo vse kar gihub ponuja v repotu za ta en service, ni treba medsebojno hackati, da mamo dva simultana pipelina... ni smiselno, je bolj clean če se lotimo 1 microservice na 1 repozitorij.
+
+Na Azure doobimo 100$, tako da FREEE MONEIIIS. 
+
+Ko se registriraš na Azure, si poglej katere regije imaš na izbiro. Te delujejo:
+- austriaeast (privzeti SKU)
+- belgiumcentral (privzeti SKU)
+- denkmarkeast (privzeti SKU)
+- francecentral (F2 SKU)
+
+
+---
+
+EN član skupine bo naredil cluster, in ko bomo commitali kodo na github CI/CD, bo ta koda pushana na cluster od ENE osebe v skupini. Tako da je na začetku vseeno kam deployamo, če nimamo istih regij, zato ker bomo na koncu samo enega od teh uporabili.
+
+Naredi samo 1 cluster. PAZI na resource grupe, ker delajo stroške ves čas. Ne glede na to ali obstaja cluster notri, dela stroške ta resource grupa!
+
+---
+
+Krediti delujejo tako da ko prvič zaženeš resource group vzame 2/3 evre, ko runnaš cluster pa posebej trga denar. Tm okol 5e/10e na mesec nam bo vzelo. Na uro je okoli 5centov.
+
+---
+
+Za docker na desktopu uporabljam Colima, je leightweight docker VM runner.
+
+Za Kubernetes CLI tool na MacOS moraš baje paziti da si -+1 verzija od vezije na Clusterju, drugače se ne more povezati.
+
+---
+
+Najprej sem naložil kubernetes cli z
+`brew install kubernetes-cli`
+in z `kubectl version --client` preveril verzijo clienta: `1.37.1`.
+
+Nato sem šel še na [Azure portal](https://portal.azure.com/#@unilj.onmicrosoft.com/resource/subscriptions/81f5976c-ba3e-468d-94c2-b367625e4b44/resourceGroups/rso-rg/providers/Microsoft.ContainerService/managedClusters/rso-cluster/overview) in pod clusters kliknil na rso-cluster, da sem odprl overview window, kjer je pisala `Kubernetes versions 1.35.8` pod Node pools.
