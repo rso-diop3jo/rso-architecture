@@ -4,7 +4,7 @@ Distilled from the lecture notes (`CONSOLTING_AGENT_raw_text.md`) and the projec
 (`[SLO] Navodila za projekt in kriterij ocenjevanja.pdf`). The architect agent checks every design,
 ADR, spec and schema against this file. Edit this file when a rule changes; the agent reads it at the start of every session.
 
-Legend: **[L]** = stated in the lecture. **[C]** = correction or clarification added after fact-checking.
+Legend: **[L]** = stated in the lecture. **[V]** = stated in a practical session (vaje), 2026-10-22. **[C]** = correction or clarification added after fact-checking.
 
 ## 1. Decomposition
 - **D1 [L]** Test every service boundary: "Can one team change, test and deploy this service without coordinating with other teams?" If not, the boundary is wrong.
@@ -59,13 +59,33 @@ Legend: **[L]** = stated in the lecture. **[C]** = correction or clarification a
 - **R3 [L]** Numeric metrics: Prometheus via `/metrics`, shown in Grafana. Collect RED (rate, errors, duration p50/p99) for services, USE (utilisation, saturation, errors) for resources, and the four Google SRE golden signals.
 - **R4 [L]** Health checks exposed per service for Kubernetes: liveness, readiness, startup.
 
-## 9. Principles to cite in reviews
+## 9. Service structure (clean architecture)
+Graded under mandatory requirement #2 ("Koncepti clean architecture"). Decision record: ADR-008.
+- **S1 [V]** Every service is built as an "onion", from the inside out: **domain** (the elementary classes and functions, e.g. the classes that define the data the service keeps), **use cases** (everything the service offers and does), then the outer ring with two parts: **web** (the service's API, incoming traffic) and **adapters** (outgoing traffic, e.g. calls to other services). In the repository these are four folders: `domain`, `usecases`, `web`, `adapters`.
+- **S2 [V]** Dependencies point inward only. An outer ring may use inner rings, never the reverse: web uses use cases, use cases use the domain, the domain imports nothing from the rings around it.
+- **S3 [V]** Services talk to each other only through another service's public API (the part exposed to other services and to the outside) or through events. Never import a class or package from another service.
+- **S4 [C]** S2 and "use cases need a database or another service" only fit together if the use-case ring defines what it needs (an interface) and an adapter implements it. Keywords: ports and adapters, dependency inversion.
+- **S5 [V]** Storage sits behind an adapter, so the implementation can differ per environment: in-memory in tests and in pipelines that only check that deployment works (fast, no database needed), a real external database in staging and production. The choice is configuration (see P4), not a code change.
+
+## 10. Delivery (CI/CD, Helm, secrets)
+Optional requirements #6 (CI/CD) and #7 (Helm charts) are in scope.
+- **P1 [V]** One repository = one pipeline = one service. A change builds, tests and deploys only that service.
+- **P2 [V]** Order the jobs with `needs`: test -> build (image, pushed to a registry) -> deploy-staging. A deploy job must depend on the build job, otherwise there may be no image to pull. The example pipeline shown at the vaje has `deploy-prod` with `needs: test` only: it can run before the image exists and then fails. Do not copy that.
+- **P3 [V]** Build the image once, then promote it. Production deploy is manual (a button) and pulls the image that already passed the tests and was checked in staging. It does not build again.
+- **P4 [V]** Environment differences live in Helm values: one values file per environment (dev, staging, production, and a test setup using in-memory storage). They hold e.g. the database address. Not in code.
+- **P5 [V]** Secrets (Azure credentials, Docker Hub token, cluster name and resource group) are GitHub Actions secrets, never in the repository. The cluster name counts as a secret too: with leaked credentials someone could deploy to our cluster. Name the secrets so Helm and the workflow can read them.
+
+## 11. Principles to cite in reviews
 Idempotency (retries, idempotent consumer, idempotency key) - Declarative design and convergence (state from events, configuration as data) - Loose coupling (events, DB per service, tenant context) - Compatibility over time (schema evolution, expand-migrate-contract).
 
-## 10. Grading (read the PDF for the full table)
+## 12. Grading (read the PDF for the full table)
 All mandatory requirements must be met, plus at least 50% of the total points. Mandatory: repository, microservices on Kubernetes, DB per service, documentation, cloud deployment, GUI. Final grade = alpha * code + (1 - alpha) * final presentation + interim presentation. Tie a finding to a requirement number when it affects points.
 
 ## Open / undecided
 - Tenant isolation model (T3): undecided.
 - Dual-write strategy (E4): undecided (candidate ADR-004).
 - Event envelope and subject naming: undecided.
+- What a tenant is in our app (the vaje example: one faculty, or one group of friends). T3 depends on it.
+- Which secrets live at organization level and which per repository (P5).
+- Where the databases live and who pays for them (the vaje idea: databases on one person's Azure account, the cluster on another's). Not decided.
+- Non-blocking flow from the GUI: the vaje suggested the UI publishes and subscribes to events, while requirement #15 and ADR-006 say the GUI talks REST. How does the GUI learn the result without blocking (rule C3)?
