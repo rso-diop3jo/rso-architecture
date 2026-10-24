@@ -4,11 +4,12 @@ Preberi si še te članke, ki bodo pomagali pri izbiri in razumevanju kaj dela k
 - [ ] [Grafana Alloy – Part 1: Replacing Promtail](https://www.suse.com/blog/grafana-alloy-part-1-replacing-promtail/)
 
 - [ ] After creating Use Cases, merge the list into one event catalogue, where the payloads (E2) are agreed.
-- [ ] Decide who owns the gRPC link (2 services) and the GraphQL endpoint (1 service) for requirement #17 (4 pts). Decide after the microservices are defined and separated. See ADR-006.
+- [ ] Decide who owns the gRPC link (2 services) and the GraphQL endpoint (1 service) for requirement #17 (4 pts). Decide after the microservices are defined and separated. See ADR-006. Services decided: gRPC `story` → `character` (`GetPartySnapshot`), GraphQL in `character`; owners still open.
 - [ ] Ask at the next vaje whether Grafana Loki counts for requirement #19 (centralized logging; the PDF names ELK Stack and Fluentd as examples).
 - [ ] When the first Go service gets its CI pipeline, add golangci-lint with errcheck. See ADR-005.
 - [ ] Decide who owns the circuit breaker for requirement #13 (5 pts), using [sony/gobreaker](https://github.com/sony/gobreaker) plus retry (rule C1). Decide after the microservices are defined and separated.
 - [ ] Ask at the next vaje how a React Native GUI is "publicly accessible" for requirement #8, and whether Google sign-in (UC-01) works the same there. See ADR-009.
+- [ ] Ask at the next vaje whether Keycloak, run inside our cluster, can count as the 6th microservice (5 own services + Keycloak) instead of building our own login service (`identity`). The lecture rule D3 says reuse existing solutions, but the vaje require 6 microservices that we implement ourselves. If yes: drop `identity`. If no: justify the own service in an ADR. See `koncept_in_meje_storitev.md`.
 - [ ] Decide whether the clean architecture import direction is checked in CI and whether every service gets an in-memory storage adapter. See ADR-008.
 
 - [ ] Clear all _ToDos in the ADRs, to clearly define all ADRs, so they do not contain any open questions.

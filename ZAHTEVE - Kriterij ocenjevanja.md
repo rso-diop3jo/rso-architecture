@@ -41,7 +41,7 @@ Stolpec **Namera**: ✅ = obvezno · 🔵 = že odločeno ali omenjeno v pravili
 | 9 | Zunanji API | Ne | 3 | 🟢 | Kateri zunanji API, v kateri storitvi, kako avtentikacija; breaker + timeout + retry: ADR-007 |
 | 10 | Večnajemništvo | Ne | 5 | 🟢 🔵 | Model izolacije (T3, še odprto), `tenant_id` skozi celotno verigo (T1–T4), K8s namespace |
 | 11 | Preverjanje zdravja | Ne | 4 | 🔵 | Končne točke liveness/readiness/startup (pravilo R4) |
-| 12 | Event sourcing + CQRS | Ne | 5 | ❓ | Katera storitev je event-sourced, ločena modela branja in pisanja, demo ponovnega predvajanja |
+| 12 | Event sourcing + CQRS | Ne | 5 | 🟢 | `character` je event-sourced (`character_events`), bralni model `character_view`, demo ponovnega predvajanja (`rebuild`); ADR-010 |
 | 13 | Izolacija in toleranca napak | Ne | 5 | 🟢 | Circuit Breaker (sony/gobreaker) + Retry (pravilo C1), demo izpada ene storitve, odstavek o izolaciji; lastnik še ni določen (_ToDo); ADR-007 |
 | 14 | Upravljanje s konfiguracijo | Ne | 4 | ❓ | Seznam parametrov na storitev, ločitev kode in konfiguracije, več virov |
 | 15 | Grafični vmesnik | Da | 4 | ✅ | Ogrodje, vsaj 2 podstrani, REST do mikrostoritev |
@@ -62,9 +62,9 @@ Stolpec **Namera**: ✅ = obvezno · 🔵 = že odločeno ali omenjeno v pravili
 | Sklop | Točke |
 |---|---|
 | Obvezno (1, 2, 3, 4, 8, 15, 22) | 28 |
-| 🔵 + 🟢 (5, 6, 7, 9, 10, 11, 13, 16, 17, 18, 19, 20) | 53 |
-| **Skupaj** | **81** (prag je 50) |
-| ❓ (12, 14) | 9 |
+| 🔵 + 🟢 (5, 6, 7, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20) | 58 |
+| **Skupaj** | **86** (prag je 50) |
+| ❓ (14) | 4 |
 | ❓ vmesna predstavitev (21) | 10 |
 
 ## Podrobnosti zahtev (minimalne zahteve iz PDF)
@@ -239,4 +239,4 @@ Stolpec **Namera**: ✅ = obvezno · 🔵 = že odločeno ali omenjeno v pravili
 
 - Število mikrostoritev: PDF zahteva 2 na člana, v `README.md` in `rules.md` (D4) je 6 mikrostoritev. To velja za 3 člane; za 6 članov bi bil minimum 12.
 - Ali Grafana Loki (pravilo R2) šteje pri zahtevi 19? PDF navaja »orodja, kot so ELK Stack ali Fluentd«, torej verjetno da, a potrdi na vajah.
-- Event sourcing (12) ni isto kot dogodkovna arhitektura (ADR-001): potrebuje lastno odločitev, katera storitev hrani stanje kot tok dogodkov.
+- Event sourcing (12) ni isto kot dogodkovna arhitektura (ADR-001): potrebuje lastno odločitev, katera storitev hrani stanje kot tok dogodkov. Rešeno: `character`, glej ADR-010.
