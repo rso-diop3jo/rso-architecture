@@ -22,7 +22,7 @@ Key details:
 - The timeout is set on the HTTP client. gobreaker does not time calls out: its `Timeout` setting is how long the breaker stays open before it probes again.
 - Counted as failures: 5xx responses, timeouts and network errors. Not counted: 4xx responses (our request was wrong, the API is healthy), set with `IsSuccessful`. Context cancellations are excluded with `IsExcluded`.
 - Retry wraps the breaker: each attempt goes through the breaker, and retrying stops when it returns `ErrOpenState`.
-- When the breaker is open, the service degrades instead of failing hard. TODO (user): what the learner sees then, defined in the use case of the service that calls the API.
+- When the breaker is open, the service degrades instead of failing hard. TODO (user): what the traveler sees then, defined in the use case of the service that calls the API.
 - State changes (`OnStateChange`) are written to stdout as logs (rule R2) and exposed as a metric (rule R3).
 - Breaker state lives in the memory of each pod; replicas do not share it.
 

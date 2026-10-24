@@ -55,7 +55,7 @@ Stolpec **Namera**: ✅ = obvezno · 🔵 = že odločeno ali omenjeno v pravili
 | 23 | Terraform | Ne | +3 | ➕ | |
 | 24 | API Gateway | Ne | +4 | ➕ | Povezano s T2 (kvote in usmerjanje po najemniku) |
 | 25 | Ingress Controller | Ne | +4 | ➕ | |
-| 26 | IAM, OAuth2, OIDC | Ne | +4 | ➕ | Povezano z UC-01/UC-02 (prijava z Google) |
+| 26 | IAM, OAuth2, OIDC | Ne | +4 | ➕ | Povezano z UC-01 (prijava z Google) |
 
 ### Točke po trenutni nameri
 

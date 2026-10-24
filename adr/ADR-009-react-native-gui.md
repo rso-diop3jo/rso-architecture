@@ -10,7 +10,7 @@
 - The GUI is counted separately from the minimum of two microservices per member (requirement #2, rule D4).
 - Some teammates write TypeScript (ADR-005), and the REST contracts are OpenAPI files with generated TypeScript clients (ADR-006).
 - Requirement #8 (mandatory, 5 points): the Kubernetes cluster and the application must be publicly accessible.
-- Learners sign in with Google (UC-01).
+- Travelers sign in with Google (UC-01).
 
 ## Decision
 The GUI is built with **React Native** and lives in **its own repository**, separate from the services. It calls the backend through the services' REST APIs (requirement #15, ADR-006).
